@@ -1,7 +1,7 @@
 #marks_name=()
 #marks_path=()
 
-function save(){
+function __gts(){
 	marks_path+=($PWD)
 	if ! [ -z "$1" ] # if $1 not null
 		then #add bookmark name from $1
@@ -12,10 +12,11 @@ function save(){
 	echo "Saved"
 }
 
-function print(){
+function __gtp(){
 	for ((i=0; i<${#marks_name[@]}; i++))
 		do printf "%i: %s\t:\t%s\n" "$i" "${marks_name[$i]}" "${marks_path[$i]}"
 	done
+	return 0;
 }
 
 function gt(){
@@ -28,6 +29,10 @@ function gt(){
 			printf "gt <index>\t: Go to bookmark with index <index>\n"
 			printf "\n"
 			return 0;
+		elif [ $1 = "-p" ]; then
+				__gtp; return $?;
+		elif [ $1 = '-s' ]; then
+				__gts $2; return $?;
 	fi
 	if [[ $(__isNum $1; echo $?) -eq 0 ]] #if is numeric
 		then
