@@ -18,8 +18,17 @@ function print(){
 	done
 }
 
-function goto(){
-
+function gt(){
+	if [ $1 = "-h" ]
+		then
+			printf "\n"
+			printf "gt -s <name>\t: Save current directory as <name>\n"
+			printf "gt -s\t\t: Save current directory without name\n"
+			printf "gt -p\t\t: Print all bookmarks\n"
+			printf "gt <index>\t: Go to bookmark with index <index>\n"
+			printf "\n"
+			return 0;
+	fi
 	if [[ $(__isNum $1; echo $?) -eq 0 ]] #if is numeric
 		then
 			if ! [[ $1 -lt 0 || -z ${marks_name[$1]} ]] #if > 0 and index of that not null
@@ -29,8 +38,8 @@ function goto(){
 				else
 					echo "Argument valid bookmark index or bookmark name"
 			fi
-		else
-			echo "Not numeric, bookmark name probably"
+	else
+		echo "Not numeric, bookmark name probably"
 	fi
 }
 
