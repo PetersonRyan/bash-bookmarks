@@ -39,7 +39,7 @@ function gt(){
 			if ! [[ $1 -lt 0 || -z ${marks_name[$1]} ]] #if > 0 and index of that not null
 				then
 					cd ${marks_path[$1]} && return 0;
-					echo "failed";
+					printf "Go to %s : %s has failed" ${marks_name[$1]} ${marks_path[$1]}
 				else
 					echo "Argument valid bookmark index or bookmark name"
 			fi
