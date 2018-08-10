@@ -3,7 +3,7 @@ __gt_paths_arr=()
 __gtbm_name_save_dir=~/.gtbm_name_save
 __gtbm_path_save_dir=~/.gtbm_path_save
 
-function __gts(){
+function __gtbm_save(){
 	__gt_paths_arr+=($PWD)
 	if ! [ -z "$1" ] # if $1 not null
 		then #add bookmark name from $1
@@ -51,8 +51,8 @@ function gt(){
 }
 
 # WIP
-function __file_save(){
-	local dir=~/.bashMarksSave
+function __gtbm_file_save(){
+	[ -z $1 ] && return 1 # Return fail if no argument
 	for ((i=0; i<${#__gt_names_arr[@]}; i++))
 	do
 		if [ "$i" = 0 ]
@@ -67,7 +67,7 @@ function __file_save(){
 }
 
 # Reads array from __gtbm_path_save_dir to __gt_paths_arr
-function __read_to_dirs(){
+function __gtbm_read_to_dirs(){
 	let i=0
 	while IFS=$'\n' read -r line_data; do
 	    __gt_paths_arr[i]="${line_data}"
@@ -76,7 +76,7 @@ function __read_to_dirs(){
 }
 
 # Reads array from __gtbm_name_save_dir to __gt_names_arr
-function __read_to_names(){
+function __gtbm_read_to_names(){
 	let i=0
 	while IFS=$'\n' read -r line_data; do
 			__gt_names_arr[i]="${line_data}"
@@ -84,7 +84,8 @@ function __read_to_names(){
 	done < "$__gtbm_name_save_dir"
 }
 
-function __isNum(){
+# Returns true if argument is positive or negative integer
+function __gtbm_isNum(){
 	local numReg="^-?[0-9]+$"
 	if [[ $1 =~ $numReg ]] ; then
 			return 0;
