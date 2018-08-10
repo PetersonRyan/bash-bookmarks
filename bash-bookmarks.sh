@@ -1,20 +1,24 @@
 __gt_names_arr=()
 __gt_paths_arr=()
-__gtbm_name_save_dir=~/.gtbm_name_save
-__gtbm_path_save_dir=~/.gtbm_path_save
+__gt_name_save_dir=~/.gt_name_save
+__gt_path_save_dir=~/.gt_path_save
 
-function __gtbm_save(){
+function __gt_save(){
 	__gt_paths_arr+=($PWD)
 	if ! [ -z "$1" ] # if $1 not null
 		then #add bookmark name from $1
 			__gt_names_arr+=($1)
 		else
-			__gt_names_arr+=() #bookmark name is just directory name
+			__gt_names_arr+=($PWD) #bookmark name is just directory name
 	fi
+
+	__gt_file_save "$__gt_name_save_dir" "${__gt_names_arr[@]}"
+	__gt_file_save "$__gt_path_save_dir" "${__gt_paths_arr[@]}"
+
 	echo "Saved"
 }
 
-function __gtp(){
+function __gt_print(){
 	for ((i=0; i<${#__gt_names_arr[@]}; i++))
 		do printf "%i: %s\t:\t%s\n" "$i" "${__gt_names_arr[$i]}" "${__gt_paths_arr[$i]}"
 	done
@@ -32,9 +36,9 @@ function gt(){
 			printf "\n"
 			return 0;
 		elif [ $1 = "-p" ]; then
-				__gtp; return $?;
+				__gt_print; return $?;
 		elif [ $1 = '-s' ]; then
-				__gts $2; return $?;
+				__gt_save $2; return $?;
 	fi
 	if [[ $(__isNum $1; echo $?) -eq 0 ]] #if is numeric
 		then
@@ -51,41 +55,44 @@ function gt(){
 }
 
 # WIP
-function __gtbm_file_save(){
+function __gt_file_save(){
 	[ -z $1 ] && return 1 # Return fail if no argument
-	for ((i=0; i<${#__gt_names_arr[@]}; i++))
+
+	local arr_to_save=("$@")
+
+	for ((i=1; i<${#arr_to_save[@]}; i++))
 	do
-		if [ "$i" = 0 ]
+		if [ "$i" = 1 ]
 		then
-			printf "%s\n" "${__gt_paths_arr[$i]}" > "$dir"
+			printf "%s\n" "${arr_to_save[$i]}" > "$1"
 			#printf "%s\t%s\n" "${__gt_names_arr[$i]}" "${__gt_paths_arr[$i]}" > "$dir"
 		else
-			printf "%s\n" "${__gt_paths_arr[$i]}" >> "$dir"
+			printf "%s\n" "${arr_to_save[$i]}" >> "$1"
 			#printf "%s\t%s\n" "${__gt_names_arr[$i]}" "${__gt_paths_arr[$i]}" >> "$dir"
 		fi
 	done
 }
 
-# Reads array from __gtbm_path_save_dir to __gt_paths_arr
-function __gtbm_read_to_dirs(){
+# Reads array from __gt_path_save_dir to __gt_paths_arr
+function __gt_read_to_dirs(){
 	let i=0
 	while IFS=$'\n' read -r line_data; do
 	    __gt_paths_arr[i]="${line_data}"
 	    ((++i))
-	done < "$__gtbm_path_save_dir"
+	done < "$__gt_path_save_dir"
 }
 
-# Reads array from __gtbm_name_save_dir to __gt_names_arr
-function __gtbm_read_to_names(){
+# Reads array from __gt_name_save_dir to __gt_names_arr
+function __gt_read_to_names(){
 	let i=0
 	while IFS=$'\n' read -r line_data; do
 			__gt_names_arr[i]="${line_data}"
 			((++i))
-	done < "$__gtbm_name_save_dir"
+	done < "$__gt_name_save_dir"
 }
 
 # Returns true if argument is positive or negative integer
-function __gtbm_isNum(){
+function __gt_isNum(){
 	local numReg="^-?[0-9]+$"
 	if [[ $1 =~ $numReg ]] ; then
 			return 0;
