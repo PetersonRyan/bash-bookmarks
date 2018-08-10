@@ -1,20 +1,22 @@
-#marks_name=()
-#marks_path=()
+__gt_names_arr=()
+__gt_paths_arr=()
+__gtbm_name_save_dir=~/.gtbm_name_save
+__gtbm_path_save_dir=~/.gtbm_path_save
 
 function __gts(){
-	marks_path+=($PWD)
+	__gt_paths_arr+=($PWD)
 	if ! [ -z "$1" ] # if $1 not null
 		then #add bookmark name from $1
-			marks_name+=($1)
+			__gt_names_arr+=($1)
 		else
-			marks_name+=($PWD) #bookmark name is just directory name
+			__gt_names_arr+=() #bookmark name is just directory name
 	fi
 	echo "Saved"
 }
 
 function __gtp(){
-	for ((i=0; i<${#marks_name[@]}; i++))
-		do printf "%i: %s\t:\t%s\n" "$i" "${marks_name[$i]}" "${marks_path[$i]}"
+	for ((i=0; i<${#__gt_names_arr[@]}; i++))
+		do printf "%i: %s\t:\t%s\n" "$i" "${__gt_names_arr[$i]}" "${__gt_paths_arr[$i]}"
 	done
 	return 0;
 }
@@ -36,10 +38,10 @@ function gt(){
 	fi
 	if [[ $(__isNum $1; echo $?) -eq 0 ]] #if is numeric
 		then
-			if ! [[ $1 -lt 0 || -z ${marks_name[$1]} ]] #if > 0 and index of that not null
+			if ! [[ $1 -lt 0 || -z ${__gt_names_arr[$1]} ]] #if > 0 and index of that not null
 				then
-					cd ${marks_path[$1]} && return 0;
-					printf "Go to %s : %s has failed" ${marks_name[$1]} ${marks_path[$1]}
+					cd ${__gt_paths_arr[$1]} && return 0;
+					printf "Go to %s : %s has failed" ${__gt_names_arr[$1]} ${__gt_paths_arr[$1]}
 				else
 					echo "Argument valid bookmark index or bookmark name"
 			fi
@@ -51,15 +53,35 @@ function gt(){
 # WIP
 function __file_save(){
 	local dir=~/.bashMarksSave
-	for ((i=0; i<${#marks_name[@]}; i++))
+	for ((i=0; i<${#__gt_names_arr[@]}; i++))
 	do
 		if [ "$i" = 0 ]
 		then
-			printf "%s\t%s\n" "${marks_name[$i]}" "${marks_path[$i]}" > "$dir"
+			printf "%s\n" "${__gt_paths_arr[$i]}" > "$dir"
+			#printf "%s\t%s\n" "${__gt_names_arr[$i]}" "${__gt_paths_arr[$i]}" > "$dir"
 		else
-			printf "%s\t%s\n" "${marks_name[$i]}" "${marks_path[$i]}" >> "$dir"
+			printf "%s\n" "${__gt_paths_arr[$i]}" >> "$dir"
+			#printf "%s\t%s\n" "${__gt_names_arr[$i]}" "${__gt_paths_arr[$i]}" >> "$dir"
 		fi
 	done
+}
+
+# Reads array from __gtbm_path_save_dir to __gt_paths_arr
+function __read_to_dirs(){
+	let i=0
+	while IFS=$'\n' read -r line_data; do
+	    __gt_paths_arr[i]="${line_data}"
+	    ((++i))
+	done < "$__gtbm_path_save_dir"
+}
+
+# Reads array from __gtbm_name_save_dir to __gt_names_arr
+function __read_to_names(){
+	let i=0
+	while IFS=$'\n' read -r line_data; do
+			__gt_names_arr[i]="${line_data}"
+			((++i))
+	done < "$__gtbm_name_save_dir"
 }
 
 function __isNum(){
