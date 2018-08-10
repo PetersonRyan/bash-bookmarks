@@ -25,6 +25,16 @@ function __gtf_print(){
 	return 0;
 }
 
+# Sets bookmark arrays to empty and deletes the save files
+function __gtf_reset(){
+	__gtv_names_arr=()
+	__gtv_paths_arr=()
+	[ -f "$__gtv_name_save_dir" ] && rm "$__gtv_name_save_dir"
+	[ -f "$__gtv_path_save_dir" ] && rm "$__gtv_path_save_dir"
+	echo "Bookmarks reset"
+	return 0;
+}
+
 function gt(){
 	if [ $1 = "-h" ]
 		then
@@ -32,6 +42,7 @@ function gt(){
 			printf "gt -s <name>\t: Save current directory as <name>\n"
 			printf "gt -s\t\t: Save current directory without name\n"
 			printf "gt -p\t\t: Print all bookmarks\n"
+			printf "gt -r\t\t: Resets bookmarks to nothing\n"
 			printf "gt <index>\t: Go to bookmark with index <index>\n"
 			printf "\n"
 			return 0;
@@ -39,6 +50,8 @@ function gt(){
 				__gtf_print; return $?;
 		elif [ $1 = '-s' ]; then
 				__gtf_save $2; return $?;
+		elif [ $1 = '-r' ]; then
+				__gtf_reset; return $?;
 	fi
 	if [[ $(__gtf_is_num $1; echo $?) -eq 0 ]] #if is numeric
 		then
@@ -103,7 +116,8 @@ function __gtf_is_num(){
 	fi
 }
 
-__gtf_read_to_names
-__gtf_read_to_dirs
+# Read the save files back into memory
+[ -f "$__gtv_name_save_dir" ] && __gtf_read_to_names
+[ -f "$__gtv_path_save_dir" ] && __gtf_read_to_dirs
 
 echo "Bash bookmarks!"
