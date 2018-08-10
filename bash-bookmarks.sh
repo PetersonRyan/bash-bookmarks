@@ -40,7 +40,7 @@ function gt(){
 		elif [ $1 = '-s' ]; then
 				__gtf_save $2; return $?;
 	fi
-	if [[ $(__isNum $1; echo $?) -eq 0 ]] #if is numeric
+	if [[ $(__gtf_is_num $1; echo $?) -eq 0 ]] #if is numeric
 		then
 			if ! [[ $1 -lt 0 || -z ${__gtv_names_arr[$1]} ]] #if > 0 and index of that not null
 				then
@@ -54,8 +54,11 @@ function gt(){
 	fi
 }
 
+# Saves array to file
+# $1 is path to file
+# Pass array as $2 using "${arrayName[@]}"
 function __gtf_file_save(){
-	[ -z $1 ] && return 1 # Return fail if no argument
+	[ -z $1 ] && return 1 # Return fail if no path argument
 
 	local arr_to_save=("$@")
 
@@ -72,15 +75,6 @@ function __gtf_file_save(){
 	done
 }
 
-# Reads array from __gtv_path_save_dir to __gtv_paths_arr
-function __gtf_read_to_dirs(){
-	let i=0
-	while IFS=$'\n' read -r line_data; do
-	    __gtv_paths_arr[i]="${line_data}"
-	    ((++i))
-	done < "$__gtv_path_save_dir"
-}
-
 # Reads array from __gtv_name_save_dir to __gtv_names_arr
 function __gtf_read_to_names(){
 	let i=0
@@ -88,6 +82,15 @@ function __gtf_read_to_names(){
 			__gtv_names_arr[i]="${line_data}"
 			((++i))
 	done < "$__gtv_name_save_dir"
+}
+
+# Reads array from __gtv_path_save_dir to __gtv_paths_arr
+function __gtf_read_to_dirs(){
+	let i=0
+	while IFS=$'\n' read -r line_data; do
+	    __gtv_paths_arr[i]="${line_data}"
+	    ((++i))
+	done < "$__gtv_path_save_dir"
 }
 
 # Returns true if argument is positive or negative integer
@@ -99,5 +102,8 @@ function __gtf_is_num(){
 			return 1;
 	fi
 }
+
+__gtf_read_to_names
+__gtf_read_to_dirs
 
 echo "Bash bookmarks!"
