@@ -36,6 +36,7 @@ function __bbf_reset(){
 }
 # bb for bash-bookmarks
 function bb(){
+	# Options
 	if [[ $1 = "-h" || -z $1 ]]
 		then
 			printf "\n"
@@ -45,9 +46,11 @@ function bb(){
 			printf "bb -r\t\t: Resets bookmarks to nothing\n"
 			printf "\n"
 			return 0;
-		elif [ $1 = '-r' ]; then
-				__bbf_reset; return $?;
+	elif [ $1 = '-r' ]; then
+		__bbf_reset; return $?;
 	fi
+
+	# Bookmarks index or name
 	if [[ $(__bbf_is_num $1; echo $?) -eq 0 ]] #if is numeric
 		then
 			if ! [[ $1 -lt 0 || -z ${__bbv_names_arr[$1]} ]] #if > 0 and index of that not null
@@ -55,7 +58,7 @@ function bb(){
 					cd "${__bbv_paths_arr[$1]}" && return 0;
 					printf "Go to %s : %s has failed" ${__bbv_names_arr[$1]} ${__bbv_paths_arr[$1]}
 				else
-					echo "Argument valid bookmark index or bookmark name"
+					echo "Invalid bookmark index"
 			fi
 	else
 		for ((i=0; i<${#__bbv_names_arr[@]}; i++))
@@ -65,6 +68,7 @@ function bb(){
 				return 0
 			fi
 		done
+		# Fallthrough if not bookmark is found
 		echo "Bookmark not found. Use bbl to list your bookmarks"
 	fi
 }
