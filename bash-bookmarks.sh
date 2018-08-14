@@ -36,20 +36,15 @@ function __bbf_reset(){
 }
 # bb for bash-bookmarks
 function bb(){
-	if [ $1 = "-h" ]
+	if [[ $1 = "-h" || -z $1 ]]
 		then
 			printf "\n"
 			printf "bbs <name>\t: Save current directory as <name>\n"
-			printf "bb \t\t: Save current directory without name\n"
-			printf "bbl \t\t: Print all bookmarks\n"
-			printf "bb -r\t\t: Resets bookmarks to nothing\n"
+			printf "bbl \t\t: List all bookmarks\n"
 			printf "bb <index>\t: Go to bookmark with index <index>\n"
+			printf "bb -r\t\t: Resets bookmarks to nothing\n"
 			printf "\n"
 			return 0;
-		elif [ $1 = "-p" ]; then
-				__bbf_print; return $?;
-		elif [ $1 = '-s' ]; then
-				__bbf_save $2; return $?;
 		elif [ $1 = '-r' ]; then
 				__bbf_reset; return $?;
 	fi
@@ -63,7 +58,14 @@ function bb(){
 					echo "Argument valid bookmark index or bookmark name"
 			fi
 	else
-		echo "Not numeric, bookmark name probably"
+		for ((i=0; i<${#__bbv_names_arr[@]}; i++))
+		do
+			if [ $1 = ${__bbv_names_arr[$i]} ]; then
+				cd ${__bbv_paths_arr[$i]}
+				return 0
+			fi
+		done
+		echo "Bookmark not found. Use bbl to list your bookmarks"
 	fi
 }
 
@@ -120,4 +122,5 @@ function __bbf_is_num(){
 [ -f "$__bbv_name_save_dir" ] && __bbf_read_to_names
 [ -f "$__bbv_path_save_dir" ] && __bbf_read_to_dirs
 
-echo "Bash bookmarks!"
+echo "Bash Bookmarks:"
+bbl
