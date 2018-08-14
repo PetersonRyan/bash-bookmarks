@@ -63,13 +63,14 @@ function bb(){
 	else
 		for ((i=0; i<${#__bbv_names_arr[@]}; i++))
 		do
-			if [ $1 = ${__bbv_names_arr[$i]} ]; then
+			if [ "$1" = "${__bbv_names_arr[$i]}" ]; then
 				cd "${__bbv_paths_arr[$i]}"
 				return 0
 			fi
 		done
 		# Fallthrough if not bookmark is found
 		echo "Bookmark not found. Use bbl to list your bookmarks"
+		! [ -z $2 ] && echo "If your bookmark name contains spaces, surround it with quotation marks"
 	fi
 }
 
