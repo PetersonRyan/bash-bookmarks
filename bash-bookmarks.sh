@@ -4,12 +4,12 @@ __bbv_name_save_dir=~/.bb_name_save
 __bbv_path_save_dir=~/.bb_path_save
 
 function bbs(){
-	__bbv_paths_arr+=($PWD)
+	__bbv_paths_arr+=("$PWD")
 	if ! [ -z "$1" ] # if $1 not null
 		then #add bookmark name from $1
-			__bbv_names_arr+=($1)
+			__bbv_names_arr+=("$1")
 		else
-			__bbv_names_arr+=($PWD) #bookmark name is just directory name
+			__bbv_names_arr+=("$PWD") #bookmark name is just directory name
 	fi
 
 	__bbf_file_save "$__bbv_name_save_dir" "${__bbv_names_arr[@]}"
@@ -52,7 +52,7 @@ function bb(){
 		then
 			if ! [[ $1 -lt 0 || -z ${__bbv_names_arr[$1]} ]] #if > 0 and index of that not null
 				then
-					cd ${__bbv_paths_arr[$1]} && return 0;
+					cd "${__bbv_paths_arr[$1]}" && return 0;
 					printf "Go to %s : %s has failed" ${__bbv_names_arr[$1]} ${__bbv_paths_arr[$1]}
 				else
 					echo "Argument valid bookmark index or bookmark name"
@@ -61,7 +61,7 @@ function bb(){
 		for ((i=0; i<${#__bbv_names_arr[@]}; i++))
 		do
 			if [ $1 = ${__bbv_names_arr[$i]} ]; then
-				cd ${__bbv_paths_arr[$i]}
+				cd "${__bbv_paths_arr[$i]}"
 				return 0
 			fi
 		done
