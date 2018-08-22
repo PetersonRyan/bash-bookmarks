@@ -25,6 +25,20 @@ function bbl(){
 	return 0;
 }
 
+function bbd(){
+	local temp_name_arr=()
+	local temp_path_arr=()
+	for ((i=0; i<${#__bbv_names_arr[@]}; i++)); do
+		if ! [ $i = $1 ]
+			then
+				temp_name_arr+=("${__bbv_names_arr[$i]}")
+				temp_path_arr+=("${__bbv_paths_arr[$i]}")
+		fi
+	done
+	__bbv_names_arr=("${temp_name_arr[@]}")
+	__bbv_paths_arr=("${temp_path_arr[@]}")
+}
+
 # Sets bookmark arrays to empty and deletes the save files
 function __bbf_reset(){
 	__bbv_names_arr=()
@@ -42,6 +56,7 @@ function bb(){
 			printf "\n"
 			printf "bbs <name>\t: Save current directory as <name>\n"
 			printf "bbl \t\t: List all bookmarks\n"
+			printf "bbd <index>\t: Remove bookmark with index <index>\n"
 			printf "bb <index>\t: Go to bookmark with index <index>\n"
 			printf "bb -r\t\t: Resets bookmarks to nothing\n"
 			printf "\n"
