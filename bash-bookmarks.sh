@@ -25,18 +25,40 @@ function bbl(){
 	return 0;
 }
 
+# Remove a bookmark by name or index
 function bbd(){
 	local temp_name_arr=()
 	local temp_path_arr=()
-	for ((i=0; i<${#__bbv_names_arr[@]}; i++)); do
-		if ! [ $i = $1 ]
-			then
-				temp_name_arr+=("${__bbv_names_arr[$i]}")
-				temp_path_arr+=("${__bbv_paths_arr[$i]}")
-		fi
-	done
+	if [[ $(__bbf_is_num $1; echo $?) -eq 0 ]] #if is numeric
+	then
+		for ((i=0; i<${#__bbv_names_arr[@]}; i++)); do
+			if ! [ $i = $1 ]
+				then
+					temp_name_arr+=("${__bbv_names_arr[$i]}")
+					temp_path_arr+=("${__bbv_paths_arr[$i]}")
+			fi
+		done
+	else
+		__bbf_delete_by_name $1; return $?;
+	fi
 	__bbv_names_arr=("${temp_name_arr[@]}")
 	__bbv_paths_arr=("${temp_path_arr[@]}")
+
+	__bbf_file_save "$__bbv_name_save_dir" "${__bbv_names_arr[@]}"
+	__bbf_file_save "$__bbv_path_save_dir" "${__bbv_paths_arr[@]}"
+}
+
+# Takes bookmark name as parameter 1, finds its index, then calls bbd with that index
+function __bbf_delete_by_name(){
+	for ((i=0; i<${#__bbv_names_arr[@]}; i++))
+	do
+		if [ "$1" = "${__bbv_names_arr[$i]}" ]; then
+			bbd $i; return $?;
+		fi
+	done
+	# Fallthrough if not bookmark is found
+	echo "Bookmark not found. Use bbl to list your bookmarks"
+	! [ -z $2 ] && echo "If your bookmark name contains spaces, surround it with quotation marks"
 }
 
 # Sets bookmark arrays to empty and deletes the save files
@@ -54,11 +76,11 @@ function bb(){
 	if [[ $1 = "-h" || -z $1 ]]
 		then
 			printf "\n"
-			printf "bbs <name>\t: Save current directory as <name>\n"
-			printf "bbl \t\t: List all bookmarks\n"
-			printf "bbd <index>\t: Remove bookmark with index <index>\n"
-			printf "bb <index>\t: Go to bookmark with index <index>\n"
-			printf "bb -r\t\t: Resets bookmarks to nothing\n"
+			printf "bbs <name>\t\t: Save current directory as <name>\n"
+			printf "bbl \t\t\t: List all bookmarks\n"
+			printf "bbd <index/name>\t: Remove bookmark with index <index> or name <name>\n"
+			printf "bb  <index/name>\t: Go to bookmark with index <index> or name <name>\n"
+			printf "bb  -r\t\t\t: Resets bookmarks to nothing\n"
 			printf "\n"
 			return 0;
 	elif [ $1 = '-r' ]; then
