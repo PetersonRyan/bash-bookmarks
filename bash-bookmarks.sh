@@ -58,6 +58,7 @@ function __bbf_delete_by_name(){
 	done
 	# Fallthrough if not bookmark is found
 	echo "Bookmark not found. Use bbl to list your bookmarks"
+	echo "For help try bb -h"
 	! [ -z $2 ] && echo "If your bookmark name contains spaces, surround it with quotation marks"
 }
 
@@ -73,7 +74,7 @@ function __bbf_reset(){
 # bb for bash-bookmarks
 function bb(){
 	# Options
-	if [[ $1 = "-h" || -z $1 ]]
+	if [[ $1 = "-h" || $1 = "--help" || -z $1 ]]
 		then
 			printf "\n"
 			printf "bbs <name>\t\t: Save current directory as <name>\n"
@@ -107,6 +108,7 @@ function bb(){
 		done
 		# Fallthrough if not bookmark is found
 		echo "Bookmark not found. Use bbl to list your bookmarks"
+		echo "For help try bb -h"
 		! [ -z $2 ] && echo "If your bookmark name contains spaces, surround it with quotation marks"
 	fi
 }
