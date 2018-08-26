@@ -20,7 +20,7 @@ function bbs(){
 
 function bbl(){
 	for ((i=0; i<${#__bbv_names_arr[@]}; i++))
-		do printf "%i: %s\t:\t%s\n" "$i" "${__bbv_names_arr[$i]}" "${__bbv_paths_arr[$i]}"
+		do printf "%i: %-10s : %s\n" "$i" "${__bbv_names_arr[$i]}" "${__bbv_paths_arr[$i]}"
 	done
 	return 0;
 }
