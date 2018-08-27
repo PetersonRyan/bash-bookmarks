@@ -83,9 +83,10 @@ function bb(){
 		then
 			printf "\n"
 			printf "bbs <name>\t\t: Save current directory as <name>\n"
+			printf "bb  <index/name>\t: Go to bookmark with index <index> or name <name>\n"
+			printf "bbo  <index/name>\t: Open bookmark with index <index> or name <name> in file manager\n"
 			printf "bbl \t\t\t: List all bookmarks\n"
 			printf "bbd <index/name>\t: Remove bookmark with index <index> or name <name>\n"
-			printf "bb  <index/name>\t: Go to bookmark with index <index> or name <name>\n"
 			printf "bb  -r\t\t\t: Resets bookmarks to nothing\n"
 			printf "\n"
 			return 0;
@@ -108,6 +109,32 @@ function bb(){
 		do
 			if [ "$1" = "${__bbv_names_arr[$i]}" ]; then
 				cd "${__bbv_paths_arr[$i]}"
+				return 0
+			fi
+		done
+		# Fallthrough if not bookmark is found
+		echo "Bookmark not found. Use bbl to list your bookmarks"
+		echo "For help try bb -h"
+		! [ -z $2 ] && echo "If your bookmark name contains spaces, surround it with quotation marks"
+	fi
+}
+
+# Opens bookmark in finder
+function bbo(){
+	if [[ $(__bbf_is_num $1; echo $?) -eq 0 ]] #if is numeric
+		then
+			if ! [[ $1 -lt 0 || -z ${__bbv_names_arr[$1]} ]] #if > 0 and index of that not null
+				then
+					open "${__bbv_paths_arr[$1]}" && return 0;
+					printf "Go to %s : %s has failed" ${__bbv_names_arr[$1]} ${__bbv_paths_arr[$1]}
+				else
+					echo "Invalid bookmark index"
+			fi
+	else
+		for ((i=0; i<${#__bbv_names_arr[@]}; i++))
+		do
+			if [ "$1" = "${__bbv_names_arr[$i]}" ]; then
+				open "${__bbv_paths_arr[$i]}"
 				return 0
 			fi
 		done
@@ -177,6 +204,7 @@ function __bbf_comp(){
 function __bbf_complete(){
 	complete -F __bbf_comp bb
 	complete -F __bbf_comp bbd
+	complete -F __bbf_comp bbo
 }
 
 # Read the save files back into memory
