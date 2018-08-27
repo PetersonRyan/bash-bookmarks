@@ -14,6 +14,7 @@ function bbs(){
 
 	__bbf_file_save "$__bbv_name_save_dir" "${__bbv_names_arr[@]}"
 	__bbf_file_save "$__bbv_path_save_dir" "${__bbv_paths_arr[@]}"
+	__bbf_complete
 
 	echo "Saved"
 }
@@ -46,6 +47,7 @@ function bbd(){
 
 	__bbf_file_save "$__bbv_name_save_dir" "${__bbv_names_arr[@]}"
 	__bbf_file_save "$__bbv_path_save_dir" "${__bbv_paths_arr[@]}"
+	__bbf_complete
 }
 
 # Takes bookmark name as parameter 1, finds its index, then calls bbd with that index
@@ -162,9 +164,22 @@ function __bbf_is_num(){
 	fi
 }
 
+# compgen function to be used by __bbf_complete
+function __bbf_comp(){
+    local cur=${COMP_WORDS[COMP_CWORD]}
+    COMPREPLY=( $(compgen -W "${__bbv_names_arr[*]}" -- $cur) )
+}
+
+# Initialize auto-complete in functions that use bookmark names
+function __bbf_complete(){
+	complete -F __bbf_comp bb
+	complete -F __bbf_comp bbd
+}
+
 # Read the save files back into memory
 [ -f "$__bbv_name_save_dir" ] && __bbf_read_to_names
 [ -f "$__bbv_path_save_dir" ] && __bbf_read_to_dirs
 
 echo "Bash Bookmarks:"
+__bbf_complete
 bbl
