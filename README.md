@@ -9,7 +9,7 @@ Every terminal window you open will list your bookmarks upon opening, for easy a
 ```
 bbs <name>        : Save current directory as <name>
 bb  <index/name>  : Go to bookmark with index <index> or name <name>
-bbo  <index/name> : Open bookmark with index <index> or name <name> in file manager
+bbo <index/name>  : Open bookmark with index <index> or name <name> in file manager
 bbl               : List all bookmarks
 bbd <index/name>  : Remove bookmark with index <index> or name <name>
 bb  -r            : Resets bookmarks to nothing
