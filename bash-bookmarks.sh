@@ -3,6 +3,7 @@ __bbv_paths_arr=()
 __bbv_name_save_dir=~/.bb_name_save
 __bbv_path_save_dir=~/.bb_path_save
 
+# bbs <name> : Save current directory as <name>
 function bbs(){
 	__bbv_paths_arr+=("$PWD")
 	if ! [ -z "$1" ] # if $1 not null
@@ -19,6 +20,7 @@ function bbs(){
 	echo "Saved"
 }
 
+# List all bookmarks index, name, and directory
 function bbl(){
 	for ((i=0; i<${#__bbv_names_arr[@]}; i++))
 		do printf "%i: %-10s : %s\n" "$i" "${__bbv_names_arr[$i]}" "${__bbv_paths_arr[$i]}"
@@ -73,6 +75,7 @@ function __bbf_reset(){
 	echo "Bookmarks reset"
 	return 0;
 }
+
 # bb for bash-bookmarks
 function bb(){
 	# Options
