@@ -84,7 +84,7 @@ function bb(){
 			printf "\n"
 			printf "bbs <name>\t\t: Save current directory as <name>\n"
 			printf "bb  <index/name>\t: Go to bookmark with index <index> or name <name>\n"
-			printf "bbo  <index/name>\t: Open bookmark with index <index> or name <name> in file manager\n"
+			printf "bbo <index/name>\t: Open bookmark with index <index> or name <name> in file manager\n"
 			printf "bbl \t\t\t: List all bookmarks\n"
 			printf "bbd <index/name>\t: Remove bookmark with index <index> or name <name>\n"
 			printf "bb  -r\t\t\t: Resets bookmarks to nothing\n"
