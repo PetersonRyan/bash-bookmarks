@@ -17,4 +17,8 @@ bb  -r            : Resets bookmarks to nothing
 
 ## Installation Instructions
 
-To install simply add `source <path_to_bash-bookmarks>/bash-bookmarks.sh` in ~/.bash_profile
+Run the following commands to download the file into your user directory, and add it to your bash profile
+```
+curl https://raw.githubusercontent.com/PetersonRyan/bash-bookmarks/master/bash-bookmarks.sh --output ~/.bash-bookmarks.sh
+echo source ~/.bash-bookmarks.sh >> ~/.profile
+```
