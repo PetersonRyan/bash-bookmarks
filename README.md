@@ -21,4 +21,5 @@ Run the following commands to download the file into your user directory, and ad
 ```
 curl https://raw.githubusercontent.com/PetersonRyan/bash-bookmarks/master/bash-bookmarks.sh --output ~/.bash-bookmarks.sh
 echo source ~/.bash-bookmarks.sh >> ~/.profile
+
 ```
