@@ -79,6 +79,11 @@ function __bbf_reset(){
 # bb for bash-bookmarks
 function bb(){
 	# Options
+	if [ -z $1 ]
+		then
+			bbl
+			return 0;
+	fi
 	if [[ $1 = "-h" || $1 = "--help" || -z $1 ]]
 		then
 			printf "\n"
