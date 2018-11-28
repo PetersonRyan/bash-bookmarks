@@ -139,7 +139,17 @@ function bbo(){
 		for ((i=0; i<${#__bbv_names_arr[@]}; i++))
 		do
 			if [ "$1" = "${__bbv_names_arr[$i]}" ]; then
-				open "${__bbv_paths_arr[$i]}"
+				if [ ! -z "$(command -v open)" -a "$(command -v open)" != " " ]; then
+					# Sometimes open exists, but we still want xdg-open.
+					# TODO: Try something like
+					# VAR="$(open /path/to/directory/; echo $?)"
+					# to get the return value. If it is 1, then try xdg-open
+					open "${__bbv_paths_arr[$i]}"
+				elif [ ! -z "$(command -v xdg-open)" -a "$(command -v xdg-open)" != " " ]; then
+					xdg-open "${__bbv_paths_arr[$i]}"
+				else
+					echo "Opening bookmarks in a file manager is not supported on this machine."
+				fi
 				return 0
 			fi
 		done
