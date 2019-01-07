@@ -22,9 +22,15 @@ function bbs(){
 
 # List all bookmarks index, name, and directory
 function bbl(){
-	for ((i=0; i<${#__bbv_names_arr[@]}; i++))
-		do printf "%i: %-10s : %s\n" "$i" "${__bbv_names_arr[$i]}" "${__bbv_paths_arr[$i]}"
-	done
+	if [ ${#__bbv_names_arr[@]} -gt 10 ]; then
+			for ((i=0; i<${#__bbv_names_arr[@]}; i++))
+				do printf "%2i: %-10s : %s\n" "$i" "${__bbv_names_arr[$i]}" "${__bbv_paths_arr[$i]}"
+			done
+		else
+			for ((i=0; i<${#__bbv_names_arr[@]}; i++))
+				do printf "%i: %-10s : %s\n" "$i" "${__bbv_names_arr[$i]}" "${__bbv_paths_arr[$i]}"
+			done
+	fi
 	return 0;
 }
 
