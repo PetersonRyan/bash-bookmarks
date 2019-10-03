@@ -153,6 +153,8 @@ function bbo(){
 					open "${__bbv_paths_arr[$i]}"
 				elif [ ! -z "$(command -v xdg-open)" -a "$(command -v xdg-open)" != " " ]; then
 					xdg-open "${__bbv_paths_arr[$i]}"
+				elif [ ! -z "$(command -v explorer)" -a "$(command -v explorer)" != " " ]; then
+					explorer "${__bbv_paths_arr[$i]}"
 				else
 					echo "Opening bookmarks in a file manager is not supported on this machine."
 				fi
