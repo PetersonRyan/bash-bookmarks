@@ -11,7 +11,8 @@ bbs <name>        : Save current directory as <name>
 bb  <index/name>  : Go to bookmark with index <index> or name <name>
 bbo <index/name>  : Open bookmark with index <index> or name <name> in file manager
 bbl               : List all bookmarks
-bbd <index/name>  : Remove bookmark with index <index> or name <name>
+bbr <index/name>  : Remove bookmark with index <index> or name <name>
+bbd <index/name>  : Alias for bbr
 bb  -r            : Resets bookmarks to nothing
 ```
 
