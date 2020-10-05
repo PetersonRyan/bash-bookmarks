@@ -58,6 +58,11 @@ function bbd(){
 	__bbf_complete
 }
 
+# Alias for bbd
+function bbr(){
+	bbd $1; return $?;
+}
+
 # Takes bookmark name as parameter 1, finds its index, then calls bbd with that index
 function __bbf_delete_by_name(){
 	for ((i=0; i<${#__bbv_names_arr[@]}; i++))
@@ -97,7 +102,8 @@ function bb(){
 			printf "bb  <index/name>\t: Go to bookmark with index <index> or name <name>\n"
 			printf "bbo <index/name>\t: Open bookmark with index <index> or name <name> in file manager\n"
 			printf "bbl \t\t\t: List all bookmarks\n"
-			printf "bbd <index/name>\t: Remove bookmark with index <index> or name <name>\n"
+			printf "bbr <index/name>\t: Remove bookmark with index <index> or name <name>\n"
+			printf "bbd <index/name>\t: Alias for bbr\n"
 			printf "bb  -r\t\t\t: Resets bookmarks to nothing\n"
 			printf "\n"
 			return 0;
